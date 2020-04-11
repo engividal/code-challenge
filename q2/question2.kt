@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
     println(partialPermutation("probably", "porbalby"))
     println(partialPermutation("despite", "desptie"))
     println(partialPermutation("moon", "nmoo"))
-    println(partialPermutation("misspellings", "msispeillgns"))
+    println(partialPermutation("misspellings", "mpeissngslli"))
 }
 
 fun partialPermutation(source: String, dest: String): Boolean{
@@ -50,9 +50,13 @@ fun partialPermutation(source: String, dest: String): Boolean{
 
     // If word has more than 3 letters, up to 2/3 of the letters have changed place
     val len = source.length
-    if(jumbled > (len * 2/3)){
-        return false
-    }else{
-        return true
-    }
+    if (len > 3){ 
+        if(jumbled > (len * 2/3)){
+            return false
+        }else{
+            return true
+        }
+    } else {
+        return jumbled > 0
+    } 
 }
