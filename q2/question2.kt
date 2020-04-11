@@ -51,7 +51,6 @@ fun partialPermutation(source: String, dest: String): Boolean{
     // If word has more than 3 letters, up to 2/3 of the letters have changed place
     val len = source.length
     if(jumbled > (len * 2/3)){
-        print(jumbled)
         return false
     }else{
         return true
