@@ -11,42 +11,17 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var list: ListView? = null
     private var adapter: ListViewAdapter? = null
     private var editsearch: SearchView? = null
-    private var wordList: Array<String>? = null
+    private val mFindWords = FindWords()
+    var wordNamesArrayList = getAll()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Generate sample data
-        wordList = arrayOf(
-            "Xmen",
-            "Titanic",
-            "Captain America",
-            "Iron man",
-            "Rocky",
-            "Transporter",
-            "Lord of the rings",
-            "The jungle book",
-            "Tarzan",
-            "Cars",
-            "Shreck"
-        )
-
-        // Locate the ListView in listview_main.xml
         list = findViewById(R.id.listview) as ListView
 
-        wordNamesArrayList = ArrayList()
-
-        for (i in wordList!!.indices) {
-            val movieNames = Words(wordList!![i])
-            // Binds all strings into an array
-            wordNamesArrayList.add(movieNames)
-        }
-
-        // Pass results to ListViewAdapter Class
+        wordNamesArrayList = getAll()
         adapter = ListViewAdapter(this)
-
-        // Binds the Adapter to the ListView
         list!!.adapter = adapter
 
         // Locate the EditText in listview_main.xml
@@ -62,8 +37,15 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         }
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        editsearch!!.clearFocus()
+        editsearch!!.setQuery( "",  false)
 
+        if (query != null) {
+            var str = mFindWords.getWords(query)
+            Toast.makeText(this@MainActivity, str[0], Toast.LENGTH_LONG).show()
+            //notifyDataSetChanged()
+        }
         return false
     }
 
@@ -74,5 +56,20 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     companion object {
         var wordNamesArrayList = ArrayList<Words>()
+    }
+
+    fun getAll(): ArrayList<Words> {
+        var arrayList = arrayListOf<Words>()
+        arrayList.add(Words("ple"))
+        arrayList.add(Words("pale"))
+        arrayList.add(Words("bale"))
+        arrayList.add(Words("bake"))
+        arrayList.add(Words("yuo"))
+        arrayList.add(Words("porbalby"))
+        arrayList.add(Words("desptie"))
+        arrayList.add(Words("nmoo"))
+        arrayList.add(Words("mpeissngslli"))
+
+        return arrayList
     }
 }
