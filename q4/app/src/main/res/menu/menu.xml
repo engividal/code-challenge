@@ -6,8 +6,9 @@
 
     <!--Search view widget as item in menu-->
     <item
-        android:id="@+id/search_bar"
-        android:title="Search"
+        android:id="@+id/reset"
+        android:title="Reset"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom|withText"
         />

@@ -1,42 +1,24 @@
 package com.example.applist
 
-import java.util.*
 import kotlin.collections.ArrayList
 
 class FindWords {
 
-    fun getWords(query: String): ArrayList<String> {
+    fun getWords(query: String, listWord: ArrayList<Word>): ArrayList<Word> {
 
-        val arrayList = getAll()
-        var result = arrayListOf<String>()
+        var result = ArrayList<Word>()
 
-        for (word in arrayList) {
-            if (partialPermutation(query, word.toString())){
-                result.add(word.toString())
+        for (word in listWord) {
+            if (partialPermutation(query, word.word)){
+                result.add(word)
             }
 
-            if (checkTypos(query, word.toString())){
-                result.add(word.toString())
+            if (checkTypos(query, word.word)){
+                result.add(word)
             }
         }
 
         return result
-    }
-
-
-    fun getAll(): ArrayList<Words> {
-        var arrayList = arrayListOf<Words>()
-        arrayList.add(Words("ple"))
-        arrayList.add(Words("pale"))
-        arrayList.add(Words("bale"))
-        arrayList.add(Words("bake"))
-        arrayList.add(Words("yuo"))
-        arrayList.add(Words("porbalby"))
-        arrayList.add(Words("desptie"))
-        arrayList.add(Words("nmoo"))
-        arrayList.add(Words("mpeissngslli"))
-
-        return arrayList
     }
 
     private fun checkTypos(s: String, t: String): Boolean {

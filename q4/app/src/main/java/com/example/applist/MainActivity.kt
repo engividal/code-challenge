@@ -1,74 +1,77 @@
 package com.example.applist
 
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     // Declare Variables
-    private var list: ListView? = null
-    private var adapter: ListViewAdapter? = null
-    private var editsearch: SearchView? = null
     private val mFindWords = FindWords()
-    var wordNamesArrayList = getAll()
+    var wordNamesArrayList = arrayListOf<Word>()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        list = findViewById(R.id.listview) as ListView
+        search.setOnQueryTextListener(this)
 
         wordNamesArrayList = getAll()
-        adapter = ListViewAdapter(this)
-        list!!.adapter = adapter
+        with(rv_name){
+            layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL,false)
+            setHasFixedSize(true)
 
-        // Locate the EditText in listview_main.xml
-        editsearch = findViewById(R.id.search) as SearchView
-        editsearch!!.setOnQueryTextListener(this)
-
-        list!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            Toast.makeText(
-                this@MainActivity,
-                wordNamesArrayList[position].getWord(),
-                Toast.LENGTH_SHORT
-            ).show()
+            adapter = WordsAdapter(this@MainActivity, wordNamesArrayList){ word ->
+                Toast.makeText(
+                    this@MainActivity,
+                    word.word,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
+
+        fab.setOnClickListener { view ->
+            wordNamesArrayList.clear()
+            wordNamesArrayList.addAll(getAll())
+            rv_name.adapter!!.notifyDataSetChanged()
+            Snackbar.make(view, "List has been reset!", Snackbar.LENGTH_SHORT)
+                .setAction("Ok", null)
+                .show()
+        }
+
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        editsearch!!.clearFocus()
-        editsearch!!.setQuery( "",  false)
-
         if (query != null) {
-            var str = mFindWords.getWords(query)
-            Toast.makeText(this@MainActivity, str[0], Toast.LENGTH_LONG).show()
-            //notifyDataSetChanged()
+            wordNamesArrayList.clear()
+            wordNamesArrayList.addAll(mFindWords.getWords(query, getAll()))
+            rv_name.adapter!!.notifyDataSetChanged()
         }
         return false
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        //adapter!!.filter(newText)
+        //rv_name.adapter!!.li
         return false
     }
 
-    companion object {
-        var wordNamesArrayList = ArrayList<Words>()
-    }
-
-    fun getAll(): ArrayList<Words> {
-        var arrayList = arrayListOf<Words>()
-        arrayList.add(Words("ple"))
-        arrayList.add(Words("pale"))
-        arrayList.add(Words("bale"))
-        arrayList.add(Words("bake"))
-        arrayList.add(Words("yuo"))
-        arrayList.add(Words("porbalby"))
-        arrayList.add(Words("desptie"))
-        arrayList.add(Words("nmoo"))
-        arrayList.add(Words("mpeissngslli"))
+    fun getAll(): ArrayList<Word> {
+        var arrayList = arrayListOf<Word>()
+        arrayList.add(Word("ple"))
+        arrayList.add(Word("pale"))
+        arrayList.add(Word("bale"))
+        arrayList.add(Word("bake"))
+        arrayList.add(Word("yuo"))
+        arrayList.add(Word("porbalby"))
+        arrayList.add(Word("desptie"))
+        arrayList.add(Word("nmoo"))
+        arrayList.add(Word("mpeissngslli"))
 
         return arrayList
     }
